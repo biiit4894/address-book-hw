@@ -6,35 +6,36 @@ public class AddressBook {
     private static List<Contact> contactList = new ArrayList<>();
 
     public void start() {
-        Scanner sc = new Scanner(System.in);
-        while(true) {
-            System.out.println("---------------------");
-            System.out.println("1. 비즈니스 연락처 추가");
-            System.out.println("2. 개인 연락처 추가");
-            System.out.println("3. 연락처 출력");
-            System.out.println("4. 연락처 검색");
-            System.out.println("5. 종료");
-            System.out.println("---------------------");
-            System.out.print("메뉴를 선택해주세요: ");
-            String menu = sc.next();
-            switch(menu) {
-                case("1"):
-                    createBusinessContact(sc);
-                    break;
-                case("2"):
-                    createPersonalContact(sc);
-                    break;
-                case("3"):
-                    displayContacts();
-                    break;
-                case("4"):
-                    searchContacts(sc);
-                    break;
-                case("5"):
-                    System.out.println("프로그램을 종료합니다.");
-                    System.exit(0);
-                default:
-                    System.out.println("잘못된 메뉴를 입력하셨습니다.");
+        try(Scanner sc = new Scanner(System.in)) {
+            while(true) {
+                System.out.println("---------------------");
+                System.out.println("1. 비즈니스 연락처 추가");
+                System.out.println("2. 개인 연락처 추가");
+                System.out.println("3. 연락처 출력");
+                System.out.println("4. 연락처 검색");
+                System.out.println("5. 종료");
+                System.out.println("---------------------");
+                System.out.print("메뉴를 선택해주세요: ");
+                String menu = sc.next();
+                switch(menu) {
+                    case("1"):
+                        createBusinessContact(sc);
+                        break;
+                    case("2"):
+                        createPersonalContact(sc);
+                        break;
+                    case("3"):
+                        displayContacts();
+                        break;
+                    case("4"):
+                        searchContacts(sc);
+                        break;
+                    case("5"):
+                        System.out.println("프로그램을 종료합니다.");
+                        System.exit(0);
+                    default:
+                        System.out.println("잘못된 메뉴를 입력하셨습니다.");
+                }
             }
         }
     }
@@ -64,22 +65,26 @@ public class AddressBook {
         contactList.add(contact);
     }
 
+    public void printContact(Contact contact) {
+        String name = contact.getName();
+        String phoneNumber = contact.getPhoneNumber();
+        if(contact instanceof PersonalContact) {
+            PersonalContact personalContact = (PersonalContact) contact;
+            String relationship = personalContact.getRelationship();
+            System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 관계: " + relationship);
+        } else if(contact instanceof BusinessContact) {
+            BusinessContact businessContact = (BusinessContact) contact;
+            String company = businessContact.getCompany();
+            System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 회사명: " + company);
+        }
+    }
+
     public void displayContacts() {
         if(contactList.isEmpty()) {
             System.out.println("연락처가 비어있습니다.");
         } else {
             for(Contact contact : contactList) {
-                String name = contact.getName();
-                String phoneNumber = contact.getPhoneNumber();
-                if(contact instanceof PersonalContact) {
-                    PersonalContact personalContact = (PersonalContact) contact;
-                    String relationship = personalContact.getRelationship();
-                    System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 관계: " + relationship);
-                } else if(contact instanceof BusinessContact) {
-                    BusinessContact businessContact = (BusinessContact) contact;
-                    String company = businessContact.getCompany();
-                    System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 회사명: " + company);
-                }
+                printContact(contact);
             }
         }
     }
@@ -92,18 +97,7 @@ public class AddressBook {
         for(Contact contact:contactList) {
             if(contact.getName().equals(searchName)) {
                 isFound = true;
-
-                String name = contact.getName();
-                String phoneNumber = contact.getPhoneNumber();
-                if(contact instanceof PersonalContact) {
-                    PersonalContact personalContact = (PersonalContact) contact;
-                    String relationship = personalContact.getRelationship();
-                    System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 관계: " + relationship);
-                } else if(contact instanceof BusinessContact) {
-                    BusinessContact businessContact = (BusinessContact) contact;
-                    String company = businessContact.getCompany();
-                    System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 회사명: " + company);
-                }
+                printContact(contact);
             }
         }
         if(!isFound) {
