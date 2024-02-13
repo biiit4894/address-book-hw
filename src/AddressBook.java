@@ -65,22 +65,26 @@ public class AddressBook {
         contactList.add(contact);
     }
 
+    public void printContact(Contact contact) {
+        String name = contact.getName();
+        String phoneNumber = contact.getPhoneNumber();
+        if(contact instanceof PersonalContact) {
+            PersonalContact personalContact = (PersonalContact) contact;
+            String relationship = personalContact.getRelationship();
+            System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 관계: " + relationship);
+        } else if(contact instanceof BusinessContact) {
+            BusinessContact businessContact = (BusinessContact) contact;
+            String company = businessContact.getCompany();
+            System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 회사명: " + company);
+        }
+    }
+
     public void displayContacts() {
         if(contactList.isEmpty()) {
             System.out.println("연락처가 비어있습니다.");
         } else {
             for(Contact contact : contactList) {
-                String name = contact.getName();
-                String phoneNumber = contact.getPhoneNumber();
-                if(contact instanceof PersonalContact) {
-                    PersonalContact personalContact = (PersonalContact) contact;
-                    String relationship = personalContact.getRelationship();
-                    System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 관계: " + relationship);
-                } else if(contact instanceof BusinessContact) {
-                    BusinessContact businessContact = (BusinessContact) contact;
-                    String company = businessContact.getCompany();
-                    System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 회사명: " + company);
-                }
+                printContact(contact);
             }
         }
     }
@@ -93,18 +97,7 @@ public class AddressBook {
         for(Contact contact:contactList) {
             if(contact.getName().equals(searchName)) {
                 isFound = true;
-
-                String name = contact.getName();
-                String phoneNumber = contact.getPhoneNumber();
-                if(contact instanceof PersonalContact) {
-                    PersonalContact personalContact = (PersonalContact) contact;
-                    String relationship = personalContact.getRelationship();
-                    System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 관계: " + relationship);
-                } else if(contact instanceof BusinessContact) {
-                    BusinessContact businessContact = (BusinessContact) contact;
-                    String company = businessContact.getCompany();
-                    System.out.println("이름: " + name + ", 전화번호: " + phoneNumber + ", 회사명: " + company);
-                }
+                printContact(contact);
             }
         }
         if(!isFound) {
